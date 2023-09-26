@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, expect, it, beforeEach } from "vitest";
-import { clearDb, seedFixtures } from "../seed-helpers";
-import { getAllMoviesWithAverageScoreOverN } from "./p5";
-import { groupBy, map, pipe, reduce, sortBy, sumBy } from "remeda";
-import { StarRating } from "@prisma/client";
+import { describe, expect, it, beforeEach } from 'vitest';
+import { clearDb, seedFixtures } from '../seed-helpers';
+import { getAllMoviesWithAverageScoreOverN } from './p5';
+import { groupBy, map, pipe, reduce, sortBy, sumBy } from 'remeda';
+import { StarRating } from '@prisma/client';
 
-describe("p4", () => {
+describe('p5', () => {
   beforeEach(async () => {
     await clearDb();
   });
 
-  it("getAllMoviesWithAverageScoreOver3 should be a function", () => {
+  it('getAllMoviesWithAverageScoreOver3 should be a function', () => {
     expect(getAllMoviesWithAverageScoreOverN).toBeInstanceOf(Function);
   });
 
-  it("Should give me all the movies with an average score over 3", async () => {
+  it('Should give me all the movies with an average score over 3', async () => {
     const { allRatings, allMovies } = await seedFixtures();
     const expected = pipe(
       allRatings,
@@ -39,7 +39,7 @@ describe("p4", () => {
     expect(actual).toEqual(expected);
   });
 
-  it("Should give me all the movies with an average score over 4", async () => {
+  it('Should give me all the movies with an average score over 4', async () => {
     const { allRatings, allMovies } = await seedFixtures();
     const expected = pipe(
       allRatings,

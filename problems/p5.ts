@@ -1,7 +1,31 @@
-import { groupBy, map, reduce, sumBy } from "remeda";
-import { prisma } from "./prisma";
-import { StarRating } from "@prisma/client";
+import { prisma } from './prisma';
 
-// hint:find all stars with the movies "included" on, then good ol' javascript should finish the job
-// This one should require more javascript work than the previous ones
-export const getAllMoviesWithAverageScoreOverN = async (n: number) => {};
+export const getAllMoviesWithAverageScoreOverN = async (n: number) => {
+  const movies = await prisma.movie.findMany({
+    include: {
+      starRatings: {},
+    },
+  });
+
+  const overNRatedMovies = movies
+    .filter((movie) => {
+      const averageRating =
+        movie.starRatings
+          .map((rating) => rating.score)
+          .reduce((a: number, b: number) => a + b) / movie.starRatings.length;
+      if (averageRating > n) {
+        return movie;
+      }
+    })
+    .map((movie) => {
+      const movieObj = {
+        id: movie.id,
+        parentalRating: movie.parentalRating,
+        releaseYear: movie.releaseYear,
+        title: movie.title,
+      };
+      return movieObj;
+    });
+
+  return overNRatedMovies;
+};

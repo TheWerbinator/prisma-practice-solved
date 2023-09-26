@@ -1,10 +1,33 @@
-import { maxBy, minBy } from "remeda";
-import { prisma } from "./prisma";
+import { prisma } from './prisma';
 
-// Always tell truths, don't you ever lie, to solve this problem, just try a `groupBy`
+export const findTheGrumpiestCriticId = async () => {
+  const ratings = await prisma.starRating.groupBy({
+    by: ['userId'],
+    _avg: {
+      score: true,
+    },
+  });
 
-// find the critic with the lowest average score
-export const findTheGrumpiestCriticId = async () => {};
+  return ratings.sort((a, b) => {
+    if (b._avg.score && a._avg.score) {
+      return a._avg.score - b._avg.score;
+    }
+    return 0;
+  })[0].userId;
+};
 
-// find the critic with the highest average score
-export const findTheNicestCriticId = async () => {};
+export const findTheNicestCriticId = async () => {
+  const ratings = await prisma.starRating.groupBy({
+    by: ['userId'],
+    _avg: {
+      score: true,
+    },
+  });
+
+  return ratings.sort((a, b) => {
+    if (b._avg.score && a._avg.score) {
+      return b._avg.score - a._avg.score;
+    }
+    return 0;
+  })[0].userId;
+};
